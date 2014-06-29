@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configures the Camel Context-->
+
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xmlns:cxf="http://camel.apache.org/schema/cxf"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:component-scan base-package="org.jkd.poc.maintnot"/>
+
+    <camel:camelContext xmlns="http://camel.apache.org/schema/spring">
+        <contextScan/>
+    </camel:camelContext>
+
+    <cxf:rsServer id="restServer" address="http://localhost:7100/maintanance" loggingFeatureEnabled="true">
+        <cxf:serviceBeans>
+            <ref bean="maintananceServiceFrontEnd"/>
+        </cxf:serviceBeans>
+
+        <cxf:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+        </cxf:providers>
+
+    </cxf:rsServer>
+
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.hsqldb.jdbc.Driver" />
+        <property name="url" value="jdbc:hsqldb:hsql://localhost:9001/maintdb" />
+        <property name="username" value="sa" />
+        <property name="password" value="" />
+    </bean>
+
+</beans>
